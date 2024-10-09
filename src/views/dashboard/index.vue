@@ -199,7 +199,7 @@ import WebSocketManager from "@/utils/websocket";
 import router from "@/router";
 
 import { useUserStore } from "@/store/modules/user";
-import StatsAPI, { VisitStatsVO } from "@/api/log";
+import LogAPI, { VisitStatsVO } from "@/api/log";
 import NoticeAPI, { NoticePageVO } from "@/api/notice";
 
 const noticeDetailRef = ref();
@@ -261,7 +261,7 @@ interface VisitStats {
 }
 // 加载访问统计数据
 const loadVisitStatsData = async () => {
-  const list: VisitStatsVO[] = await StatsAPI.getVisitStats();
+  const list: VisitStatsVO[] = await LogAPI.getVisitStats();
 
   if (list) {
     const tagTypes: ("primary" | "success" | "warning")[] = [

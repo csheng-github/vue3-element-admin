@@ -10,7 +10,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "baseUrl": ".",
+    "baseUrl": ".", // 解析非相对模块的基地址，默认是当前目录
     "allowJs": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
@@ -19,13 +19,13 @@
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"] // 路径映射，相对于baseUrl
     },
     "types": ["vite/client", "element-plus/global"]
   },
   "include": [
     "mock/**/*.ts",
-    "src/**/*.ts",
+    "src/**/*.ts", // 引入自动导入TS类型声明文件
     "src/**/*.vue",
     "vite.config.ts",
     "src/views/system/notice/components/myvue"

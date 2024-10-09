@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import setupPlugins from "@/plugins";
 
-// 本地SVG图标
+// 本地SVG图标（注册脚本）
 import "virtual:svg-icons-register";
 
 // 样式

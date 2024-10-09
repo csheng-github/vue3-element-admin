@@ -9,7 +9,7 @@ module.exports = {
   extends: [
     // https://eslint.vuejs.org/user-guide/#usage
     "plugin:vue/vue3-recommended",
-    "./.eslintrc-auto-import.json",
+    "./.eslintrc-auto-import.json", // 引入自动导入函数 eslint 规则
     "prettier",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",

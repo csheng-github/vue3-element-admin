@@ -1,16 +1,22 @@
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import { UserConfig, ConfigEnv, loadEnv, defineConfig } from "vite";
+import { resolve } from "path";
 
+// 按需自动导入API（ref，reactive,watch,computed 等API）
 import AutoImport from "unplugin-auto-import/vite";
+// 按需自动导入组件（指定目录下的自定义组件）
 import Components from "unplugin-vue-components/vite";
+// 按需自动导入组件（Element Plus 组件）
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 
+// 引入整合 SVG 图标插件
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
+// 引入UnoCSS
+import UnoCSS from "unocss/vite";
+
 import mockDevServerPlugin from "vite-plugin-mock-dev-server";
 
-import UnoCSS from "unocss/vite";
-import { resolve } from "path";
 import {
   name,
   version,
@@ -34,6 +40,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd());
   return {
     resolve: {
+      // 路径别名
       alias: {
         "@": pathSrc,
       },
@@ -57,12 +64,11 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       port: Number(env.VITE_APP_PORT),
       // 运行是否自动打开浏览器
       open: true,
+      // 反向代理解决跨域
       proxy: {
-        /** 代理前缀为 /dev-api 的请求  */
         [env.VITE_APP_BASE_API]: {
-          changeOrigin: true,
-          // 接口地址 例如：http://vapi.youlai.tech
           target: env.VITE_APP_API_URL,
+          changeOrigin: true,
           rewrite: (path) =>
             path.replace(new RegExp("^" + env.VITE_APP_BASE_API), ""),
         },
@@ -74,24 +80,17 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       vueJsx(),
       // MOCK 服务
       env.VITE_MOCK_DEV_SERVER === "true" ? mockDevServerPlugin() : null,
-      UnoCSS({
-        hmrTopLevelAwait: false,
-      }),
-      /** 自动导入配置  @see https://github.com/sxzz/element-plus-best-practices/blob/main/vite.config.ts */
+      // UnoCSS 配置
+      UnoCSS({ hmrTopLevelAwait: false }),
       AutoImport({
         // 自动导入 Vue 相关函数，如：ref, reactive, toRef 等
         imports: ["vue", "@vueuse/core", "pinia", "vue-router", "vue-i18n"],
-        resolvers: [
-          // 自动导入 Element Plus 相关函数，如：ElMessage, ElMessageBox... (带样式)
-          ElementPlusResolver({
-            importStyle: "sass",
-          }),
-        ],
+        // 自动导入 Element Plus 相关函数，如：ElMessage, ElMessageBox... (带样式)
+        resolvers: [ElementPlusResolver({ importStyle: "sass" })],
+        // 生成 eslint 规则
         eslintrc: {
-          // 是否自动生成 eslint 规则，建议生成之后设置 false
-          enabled: false,
-          // 指定自动导入函数 eslint 规则的文件
-          filepath: "./.eslintrc-auto-import.json",
+          enabled: false, // 建议生成之后设置 false
+          filepath: "./.eslintrc-auto-import.json", // 指定自动导入函数 eslint 规则的文件
           globalsPropValue: true,
         },
         // 是否在 vue 模板中自动导入
@@ -101,14 +100,10 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         // dts: "src/types/auto-imports.d.ts",
       }),
       Components({
-        resolvers: [
-          // 自动导入 Element Plus 组件
-          ElementPlusResolver({
-            importStyle: "sass",
-          }),
-        ],
         // 指定自定义组件位置(默认:src/components)
         dirs: ["src/components", "src/**/components"],
+        // 自动导入 Element Plus 组件
+        resolvers: [ElementPlusResolver({ importStyle: "sass" })],
         // 指定自动导入组件TS类型声明文件路径 (false:关闭自动生成)
         dts: false,
         // dts: "src/types/components.d.ts",

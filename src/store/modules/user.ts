@@ -10,12 +10,7 @@ export const useUserStore = defineStore("user", () => {
     perms: [],
   });
 
-  /**
-   * 登录
-   *
-   * @param {LoginData}
-   * @returns
-   */
+  // 登录
   function login(loginData: LoginData) {
     return new Promise<void>((resolve, reject) => {
       AuthAPI.login(loginData)
@@ -36,11 +31,11 @@ export const useUserStore = defineStore("user", () => {
       UserAPI.getInfo()
         .then((data) => {
           if (!data) {
-            reject("Verification failed, please Login again.");
+            reject("验证失败，请重新登录。");
             return;
           }
           if (!data.roles || data.roles.length <= 0) {
-            reject("getUserInfo: roles must be a non-null array!");
+            reject("getUserInfo: roles必须是非空数组!");
             return;
           }
           Object.assign(user.value, { ...data });
@@ -52,7 +47,7 @@ export const useUserStore = defineStore("user", () => {
     });
   }
 
-  // user logout
+  // 用户注销
   function logout() {
     return new Promise<void>((resolve, reject) => {
       AuthAPI.logout()
@@ -66,7 +61,7 @@ export const useUserStore = defineStore("user", () => {
     });
   }
 
-  // remove token
+  // 移除令牌
   function resetToken() {
     return new Promise<void>((resolve) => {
       removeToken();

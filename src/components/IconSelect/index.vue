@@ -101,9 +101,6 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue"]);
 const selectedIcon = toRef(props, "modelValue");
 
-const iconSelectRef = ref();
-const popoverContentRef = ref();
-
 const activeTab = ref("svg"); // 默认激活的Tab
 const searchText = ref(""); // 筛选的值
 const popoverVisible = ref(false); // 弹窗显示状态
@@ -114,9 +111,7 @@ const filteredSvgIcons = ref<string[]>([]); // 过滤后的SVG图标名称集合
 const epIcons: string[] = Object.keys(ElementPlusIconsVue); // Element Plus图标集合
 const filteredEpIcons = ref<string[]>([]); // 过滤后的Element Plus图标名称集合
 
-onMounted(() => {
-  loadIcons();
-});
+onMounted(() => loadIcons());
 
 /**
  * icon 加载
@@ -173,6 +168,8 @@ function selectIcon(iconName: string) {
 /**
  * 点击容器外的区域关闭弹窗 VueUse onClickOutside
  */
+const iconSelectRef = ref();
+const popoverContentRef = ref();
 onClickOutside(iconSelectRef, () => (popoverVisible.value = false), {
   ignore: [popoverContentRef],
 });
